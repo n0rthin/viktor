@@ -14,5 +14,6 @@ unsigned int get_capacity(list_t *list);
 unsigned int get_length(list_t *list);
 void *get_item(list_t *list, int index);
 int add_item(list_t *list, void *item);
+int add_items(list_t *list, void *items, unsigned int n);
 
 #endif
