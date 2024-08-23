@@ -4,10 +4,11 @@
 typedef struct index_t index_t;
 typedef int vec_id_t;
 typedef int vec_elem_t;
-typedef vec_elem_t *vec_t;
+typedef vec_elem_t vec_t[];
 
 int create_index(unsigned int dimensions, index_t **index_out);
 int destroy_index(index_t *index);
+void display_index(index_t *index);
 
 unsigned int get_dimensions(index_t *index);
 unsigned int get_size(index_t *index);

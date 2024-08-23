@@ -47,6 +47,7 @@ unsigned int get_capacity(list_t *list) { return list->capacity; }
 unsigned int get_length(list_t *list) { return list->length; }
 
 void *get_item(list_t *list, int index) {
+    // printf("[list]: accessing %dth item in the list of %d items\n", index, list->length);
     if (list->length == index) {
         return NULL;
     }
@@ -71,7 +72,7 @@ int add_items(list_t *list, void *items, unsigned int n) {
 
     memcpy((char *)list->arr + list->length * list->item_size, items,
            list->item_size * n);
-    list->length++;
+    list->length += n;
 
     return STATUS_SUCCESS;
 }

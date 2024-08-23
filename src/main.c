@@ -1,39 +1,66 @@
+#include "array_list.h"
+#include "common.h"
+#include "index.h"
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
-#include "array_list.h"
-#include "index.h"
-#include "common.h"
 
 int test_list();
+#define DIMEN 2
 
 int main() {
     if (test_list() != 0) {
         return -1;
     }
 
-    const int dimensionality = 10;
+    const int dimensionality = DIMEN;
     index_t *index = NULL;
     if (create_index(dimensionality, &index) == STATUS_ERROR) {
         printf("failed to create index\n");
         return -1;
     }
 
-    int *arr = calloc(dimensionality, sizeof(int));
-    for (int i = 0; i < dimensionality; i++) {
-        arr[i] = pow(i, i);
-    }
+    int vec1[DIMEN] = {1, 5};
+    int vec2[DIMEN] = {1, 4};
+    int vec3[DIMEN] = {3, 3};
+    int vec4[DIMEN] = {3, 2};
 
-    vec_id_t vec_id = add_vector(index, arr);
-    if (vec_id == STATUS_ERROR) {
-        printf("failed to add vector to index\n");
+    add_vector(index, vec2);
+    add_vector(index, vec4);
+    add_vector(index, vec3);
+    add_vector(index, vec1);
+    
+    display_index(index);
+    
+    vec_id_t *search_result = NULL;
+    vec_elem_t qvec[DIMEN] = {1, 6};
+    int k = 2;
+    int n_found = search_knn(index, qvec, k, &search_result);
+    if (n_found == STATUS_ERROR) {
+        printf("Failed to perform a search\n");
         return -1;
     }
+    display_index(index);
 
-    printf("vector id: %d\n", vec_id);
-    printf("index size: %d\n", get_size(index));
-    printf("elem of %d vector at index %d: %d\n", vec_id, 5, *get_vec_elem(index, vec_id, 5));
+    printf("Nearest %d neighbours to the [", k);
+    for (int i = 0; i < DIMEN; i++) {
+        printf("%d", qvec[i]);
+        if (i < DIMEN - 1) {
+            printf(",");
+        }
+    }
+    printf("]:\n");
 
+    for (int i = 0; i < n_found; i++) {
+        printf("%d. [", search_result[i]);
+        for (int j = 0; j < DIMEN; j++) {
+            printf("%d", *get_vec_elem(index, search_result[i], j));
+            if (j < DIMEN - 1) {
+                printf(",");
+            }
+        }
+        printf("]\n");
+    }
 
     return 0;
 }
